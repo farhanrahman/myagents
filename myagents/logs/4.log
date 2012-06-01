@@ -1,0 +1,38 @@
+0    [main] INFO  uk.ac.imperial.presage2.core.db.DatabaseModule  - Looking for database settings in db.properties.
+478  [main] FATAL uk.ac.imperial.presage2.core.simulator.RunnableSimulation  - uk.ac.imperial.myagents.MySimulation is not on the classpath!
+java.lang.ClassNotFoundException: uk.ac.imperial.myagents.MySimulation
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:202)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:190)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:306)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:301)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:247)
+	at java.lang.Class.forName0(Native Method)
+	at java.lang.Class.forName(Class.java:169)
+	at uk.ac.imperial.presage2.core.simulator.RunnableSimulation.newFromClassName(RunnableSimulation.java:333)
+	at uk.ac.imperial.presage2.core.simulator.RunnableSimulation.runSimulationID(RunnableSimulation.java:518)
+	at uk.ac.imperial.presage2.core.cli.Presage2CLI.run(Presage2CLI.java:421)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at uk.ac.imperial.presage2.core.cli.Presage2CLI.main(Presage2CLI.java:114)
+java.lang.reflect.InvocationTargetException
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at uk.ac.imperial.presage2.core.cli.Presage2CLI.main(Presage2CLI.java:114)
+Caused by: java.lang.ClassNotFoundException: uk.ac.imperial.myagents.MySimulation
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:202)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:190)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:306)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:301)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:247)
+	at java.lang.Class.forName0(Native Method)
+	at java.lang.Class.forName(Class.java:169)
+	at uk.ac.imperial.presage2.core.simulator.RunnableSimulation.newFromClassName(RunnableSimulation.java:333)
+	at uk.ac.imperial.presage2.core.simulator.RunnableSimulation.runSimulationID(RunnableSimulation.java:518)
+	at uk.ac.imperial.presage2.core.cli.Presage2CLI.run(Presage2CLI.java:421)
+	... 5 more

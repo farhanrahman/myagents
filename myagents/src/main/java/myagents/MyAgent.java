@@ -24,16 +24,11 @@ public class MyAgent extends AbstractParticipant {
 
 	Location loc;
 	
-	private double carbonEmission = 10.0;
-
-	private Map<Integer, Double> carbonEmissionReports;
-	
 	ParticipantLocationService locationService;
 	
 	public MyAgent(UUID id, String name, Location loc){
 		super(id,name);
 		this.loc = loc;
-		this.carbonEmissionReports = new HashMap<Integer, Double>();
 	}
 	
 	@Override
@@ -46,25 +41,10 @@ public class MyAgent extends AbstractParticipant {
 	protected Set<ParticipantSharedState> getSharedState(){
 		Set<ParticipantSharedState> s = super.getSharedState();
 		s.add(ParticipantLocationService.createSharedState(getID(), loc));
-		s.add(new ParticipantSharedState("Report", 
-	            (Serializable) this.getCarbonEmissionReports(), getID()));
 		return s;
 	}
 	
-	public Map<Integer,Double> getCarbonEmissionReports(){
-		return this.carbonEmissionReports;
-	}
-	
-	public Map<Integer,Double> addToReports(Time simTime, Double emission){
-		this.carbonEmissionReports.put(simTime.intValue(), emission);
-		return this.carbonEmissionReports;
-	}
-	
-	public Double calculateCarbonEmission(){
-		//TODO add code to calculate whether to submit true or false report (cheat)
-		return new Double(carbonEmission++);
-	}
-	
+
 	@Override
 	public void initialise(){
 		super.initialise();
@@ -94,13 +74,7 @@ public class MyAgent extends AbstractParticipant {
 		Location loca = this.locationService.getAgentLocation(getID());
 		logger.info("nearby location is" + loca.toString() + " Distance to: "+ loca.distanceTo(loc));*/
 		
-		//Test for submitting reports
-		try{
-			this.environment.act(new SubmitCarbonEmissionReport(this.calculateCarbonEmission(), SimTime.get(), this), this.getID(), this.authkey);
-		}catch(ActionHandlingException e){
-			logger.warn("Error trying to submit report");
-		}
-		
+		//Put tests in here
 		
 	}
 

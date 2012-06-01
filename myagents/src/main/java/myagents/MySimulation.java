@@ -3,10 +3,6 @@ package myagents;
 import java.util.HashSet;
 import java.util.Set;
 
-import actions.SubmitCarbonEmissionReportHandler;
-
-import carbon.CarbonReportingService;
-
 import com.google.inject.AbstractModule;
 
 import uk.ac.imperial.presage2.core.simulator.InjectedSimulation;
@@ -41,10 +37,7 @@ public class MySimulation extends InjectedSimulation {
 		
 		//Here is where you define the enviroment by adding the required modules to it.
 		modules.add(new AbstractEnvironmentModule()
-						.addActionHandler(MoveHandler.class)
-						.addActionHandler(SubmitCarbonEmissionReportHandler.class)
-						.addParticipantEnvironmentService(ParticipantLocationService.class)
-						.addGlobalEnvironmentService(CarbonReportingService.class));
+						.addActionHandler(MoveHandler.class));
 		
 		modules.add(NetworkModule.noNetworkModule());
 		

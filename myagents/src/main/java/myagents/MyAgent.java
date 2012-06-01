@@ -26,14 +26,14 @@ public class MyAgent extends AbstractParticipant {
 	
 	private double carbonEmission = 10.0;
 
-	private Map<Time, Double> carbonEmissionReports;
+	private Map<Integer, Double> carbonEmissionReports;
 	
 	ParticipantLocationService locationService;
 	
 	public MyAgent(UUID id, String name, Location loc){
 		super(id,name);
 		this.loc = loc;
-		this.carbonEmissionReports = new HashMap<Time, Double>();
+		this.carbonEmissionReports = new HashMap<Integer, Double>();
 	}
 	
 	@Override
@@ -51,12 +51,12 @@ public class MyAgent extends AbstractParticipant {
 		return s;
 	}
 	
-	public Map<Time,Double> getCarbonEmissionReports(){
+	public Map<Integer,Double> getCarbonEmissionReports(){
 		return this.carbonEmissionReports;
 	}
 	
-	public Map<Time,Double> addToReports(Time simTime, Double emission){
-		this.carbonEmissionReports.put(simTime, emission);
+	public Map<Integer,Double> addToReports(Time simTime, Double emission){
+		this.carbonEmissionReports.put(simTime.intValue(), emission);
 		return this.carbonEmissionReports;
 	}
 	

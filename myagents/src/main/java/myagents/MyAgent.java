@@ -78,7 +78,7 @@ public class MyAgent extends AbstractParticipant {
 	
 	@Override
 	public void execute(){
-		this.loc = locationService.getAgentLocation(this.getID());
+		/*this.loc = locationService.getAgentLocation(this.getID());
 		logger.info("My Location is: " + this.loc);
 		
 		int dx = Random.randomInt(2) - 1;
@@ -92,7 +92,7 @@ public class MyAgent extends AbstractParticipant {
 		}
 		
 		Location loca = this.locationService.getAgentLocation(getID());
-		logger.info("nearby location is" + loca.toString() + " Distance to: "+ loca.distanceTo(loc));
+		logger.info("nearby location is" + loca.toString() + " Distance to: "+ loca.distanceTo(loc));*/
 		
 		//Test for submitting reports
 		try{

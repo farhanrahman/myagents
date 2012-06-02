@@ -38,7 +38,7 @@ public class MySimulation extends InjectedSimulation {
 		modules.add(new AbstractEnvironmentModule()
 						.addActionHandler(MoveHandler.class));
 		
-		modules.add(NetworkModule.noNetworkModule());
+		modules.add(NetworkModule.fullyConnectedNetworkModule());
 		
 		return modules;
 	}

@@ -1,5 +1,6 @@
 package myagents;
 
+import helloprotocol.HelloWorldProtocol;
 import helloprotocol.SimpleProtocol;
 
 import java.util.Set;
@@ -22,7 +23,7 @@ public class MyAgent extends AbstractParticipant {
 	
 	ParticipantLocationService locationService;
 	
-	private SimpleProtocol simpleProtocol;
+	private HelloWorldProtocol simpleProtocol;
 	
 	
 	public MyAgent(UUID id, String name, Location loc){
@@ -32,8 +33,7 @@ public class MyAgent extends AbstractParticipant {
 	
 	@Override
 	protected void processInput(Input in) {
-		// TODO Auto-generated method stub
-
+		this.simpleProtocol.canHandle(in);
 	}
 	
 	@Override
@@ -53,9 +53,10 @@ public class MyAgent extends AbstractParticipant {
 			logger.warn(e);
 		}*/
 		
-		this.simpleProtocol = new SimpleProtocol("SIMPLE",
-				this.network, this.authkey, this.getID(), this.environment);
+		//this.simpleProtocol = new SimpleProtocol("SIMPLE",
+		//		this.network, this.authkey, this.getID(), this.environment);
 		
+		this.simpleProtocol = new HelloWorldProtocol(this.getName(), network);		
 	}
 	
 	@Override
@@ -87,14 +88,32 @@ public class MyAgent extends AbstractParticipant {
 					+ " with participant" + this.getID());
 		
 		//if(activeConversations.size() == 0){
-			for(NetworkAddress net : this.network.getConnectedNodes()){
+/*			for(NetworkAddress net : this.network.getConnectedNodes()){
 				if(!activeConversations.contains(net)){
+					logger.info("agent ID= " + this.getID() + " about to spawn");
 					this.simpleProtocol.spawn(net);
 				}
-			}
+			}*/
 		//}else{
 		//	logger.info("no active conversation");
 		//}
+			
+			try {
+				Set<NetworkAddress> alreadyTalkingTo = this.simpleProtocol
+						.getActiveConversationMembers();
+				int convCount = alreadyTalkingTo.size();
+				for (NetworkAddress a : this.network.getConnectedNodes()) {
+					logger.info("I'm connected to: " + a);
+					// spawn a conversation if I'm not already taking them them
+					// (limit 5 convs)
+					if (!alreadyTalkingTo.contains(a) && convCount < 5) {
+						this.simpleProtocol.spawn(a);
+						convCount++;
+					}
+				}
+			} catch (UnsupportedOperationException e) {
+				logger.warn("Can't get connected nodes", e);
+			}			
 		
 	}
 

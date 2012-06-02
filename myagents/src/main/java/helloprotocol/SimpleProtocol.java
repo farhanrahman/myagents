@@ -90,6 +90,7 @@ public class SimpleProtocol extends FSMProtocol {
 							public void processSpawn(
 									ConversationSpawnEvent event,
 									FSMConversation conv, Transition transition) {
+									logger.info("processSpawn for agent= " + SimpleProtocol.this.getParticipantID());
 									conv.getNetwork().sendMessage(
 											new UnicastMessage<Object>(
 													Performative.PROPOSE, 
@@ -102,7 +103,8 @@ public class SimpleProtocol extends FSMProtocol {
 								
 							}
 				
-			}).addTransition(
+			})
+			.addTransition(
 						Transitions.GET_REPLY, 
 						new AndCondition(new MessageTypeCondition("REPLY"), new ConversationCondition()), 
 						/*Conversation conditiion makes sure that the ID that the conversation was initialised with
@@ -115,24 +117,26 @@ public class SimpleProtocol extends FSMProtocol {
 							@Override
 							public void processMessage(Message<?> message,
 									FSMConversation conv, Transition transition) {
-									logger.info("Got REPLY message for agent with ID" + SimpleProtocol.this.getParticipantID());
+									logger.info("Got REPLY message for agent with ID"
+											+ SimpleProtocol.this.getParticipantID());
 							}
 							
-						}).addTransition(
-								Transitions.TIMEOUT, 
-								new TimeoutCondition(4), 
-								States.WAIT_FOR_REPLY, 
-								States.TIMED_OUT, 
-								new Action(){
+						})
+			.addTransition(
+						Transitions.TIMEOUT, 
+						new TimeoutCondition(4), 
+						States.WAIT_FOR_REPLY, 
+						States.TIMED_OUT, 
+						new Action(){
 
-									@Override
-									public void execute(Object event,
-											Object entity, Transition transition) {
-											logger.info("Timed out");
-										
-									}
-									
-								}
+							@Override
+							public void execute(Object event,
+									Object entity, Transition transition) {
+									logger.info("Timed out");
+								
+							}
+							
+						}
 						);
 			
 			//Replier transitions

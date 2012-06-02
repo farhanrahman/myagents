@@ -5,8 +5,9 @@ import helloprotocol.SimpleProtocol;
 import java.util.Set;
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
+
 import uk.ac.imperial.presage2.core.environment.ParticipantSharedState;
-import uk.ac.imperial.presage2.core.environment.UnavailableServiceException;
 import uk.ac.imperial.presage2.core.messaging.Input;
 import uk.ac.imperial.presage2.core.network.NetworkAddress;
 import uk.ac.imperial.presage2.util.location.Location;
@@ -15,6 +16,8 @@ import uk.ac.imperial.presage2.util.participant.AbstractParticipant;
 
 public class MyAgent extends AbstractParticipant {
 
+	Logger logger = Logger.getLogger(MyAgent.class);
+	
 	Location loc;
 	
 	ParticipantLocationService locationService;
@@ -74,17 +77,24 @@ public class MyAgent extends AbstractParticipant {
 		logger.info("nearby location is" + loca.toString() + " Distance to: "+ loca.distanceTo(loc));*/
 		
 		//Put tests in here
+		if(this.simpleProtocol != null){
+			simpleProtocol.incrementTime();
+		}		
 		
 		Set<NetworkAddress> activeConversations = this.simpleProtocol.getActiveConversationMembers();
 		
 		logger.info("Number of participants in the conversation with: " + activeConversations.size()
 					+ " with participant" + this.getID());
 		
-		if(activeConversations.size() == 0){
+		//if(activeConversations.size() == 0){
 			for(NetworkAddress net : this.network.getConnectedNodes()){
-				this.simpleProtocol.spawn(net);
+				if(!activeConversations.contains(net)){
+					this.simpleProtocol.spawn(net);
+				}
 			}
-		}
+		//}else{
+		//	logger.info("no active conversation");
+		//}
 		
 	}
 

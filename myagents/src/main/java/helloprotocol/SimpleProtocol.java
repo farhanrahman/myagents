@@ -13,6 +13,7 @@ import uk.ac.imperial.presage2.core.network.Message;
 import uk.ac.imperial.presage2.core.network.NetworkAdaptor;
 import uk.ac.imperial.presage2.core.network.UnicastMessage;
 import uk.ac.imperial.presage2.core.simulator.SimTime;
+import uk.ac.imperial.presage2.util.fsm.Action;
 import uk.ac.imperial.presage2.util.fsm.AndCondition;
 import uk.ac.imperial.presage2.util.fsm.EventTypeCondition;
 import uk.ac.imperial.presage2.util.fsm.FSM;
@@ -52,6 +53,7 @@ public class SimpleProtocol extends FSMProtocol {
 		START,
 		WAIT_FOR_REPLY,
 		DONE,
+		MESSAGE_RECEIVED,
 		TIMED_OUT
 	};
 	
@@ -73,6 +75,7 @@ public class SimpleProtocol extends FSMProtocol {
 			this.description.addState(States.START, StateType.START)
 							.addState(States.WAIT_FOR_REPLY)
 							.addState(States.DONE,StateType.END)
+							.addState(States.MESSAGE_RECEIVED, StateType.END)
 							.addState(States.TIMED_OUT, StateType.END);
 			
 			//Initiator transition
@@ -89,7 +92,7 @@ public class SimpleProtocol extends FSMProtocol {
 									FSMConversation conv, Transition transition) {
 									conv.getNetwork().sendMessage(
 											new UnicastMessage<Object>(
-													Performative.REQUEST, 
+													Performative.PROPOSE, 
 													"MESSAGE", 
 													SimTime.get(), 
 													conv.getNetwork().getAddress(), 
@@ -120,20 +123,24 @@ public class SimpleProtocol extends FSMProtocol {
 								new TimeoutCondition(4), 
 								States.WAIT_FOR_REPLY, 
 								States.TIMED_OUT, 
-								new MessageAction(){
+								new Action(){
+
 									@Override
-									public void processMessage(Message<?> message,
-											FSMConversation conv, Transition transition) {
+									public void execute(Object event,
+											Object entity, Transition transition) {
 											logger.info("Timed out");
+										
 									}
-						});
+									
+								}
+						);
 			
 			//Replier transitions
 			this.description.addTransition(
 					Transitions.REPLY, 
 					new MessageTypeCondition("MESSAGE"), 
 					States.START, 
-					States.DONE, 
+					States.MESSAGE_RECEIVED, 
 					new InitialiseConversationAction(){
 						@Override
 						public void processInitialMessage(Message<?> message,
@@ -141,7 +148,7 @@ public class SimpleProtocol extends FSMProtocol {
 								conv.getNetwork().sendMessage(
 										new UnicastMessage<Object>(
 												Performative.AGREE,
-												new String("REPLY"),
+												"REPLY",
 												SimTime.get(),
 												conv.getNetwork().getAddress(),
 												message.getFrom())

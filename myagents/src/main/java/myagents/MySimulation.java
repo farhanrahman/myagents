@@ -3,8 +3,6 @@ package myagents;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.google.inject.AbstractModule;
-
 import uk.ac.imperial.presage2.core.simulator.InjectedSimulation;
 import uk.ac.imperial.presage2.core.simulator.Parameter;
 import uk.ac.imperial.presage2.core.simulator.Scenario;
@@ -14,6 +12,8 @@ import uk.ac.imperial.presage2.util.location.Location;
 import uk.ac.imperial.presage2.util.location.MoveHandler;
 import uk.ac.imperial.presage2.util.location.area.Area;
 import uk.ac.imperial.presage2.util.network.NetworkModule;
+
+import com.google.inject.AbstractModule;
 
 public class MySimulation extends InjectedSimulation {
 
@@ -38,7 +38,16 @@ public class MySimulation extends InjectedSimulation {
 		modules.add(new AbstractEnvironmentModule()
 						.addActionHandler(MoveHandler.class));
 		
-		modules.add(NetworkModule.fullyConnectedNetworkModule());
+		modules.add(NetworkModule.fullyConnectedNetworkModule().withNodeDiscovery());
+		
+		/*Set<Class<? extends NetworkConstraint>> constraints = new HashSet<Class<? extends NetworkConstraint>>();
+		constraints.add(NetworkRangeConstraint.class);
+		modules.add(NetworkModule.constrainedNetworkModule(constraints));*/		
+		
+		/*Set<Class<? extends NetworkConstraint>> constraints = new HashSet<Class<? extends NetworkConstraint>>();
+		constraints.add(NetworkRangeConstraint.class);
+		modules.add(NetworkModule.constrainedNetworkModule(constraints)
+				.withNodeDiscovery());*/
 		
 		return modules;
 	}

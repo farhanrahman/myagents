@@ -41,13 +41,13 @@ public class CarbonReportingService extends EnvironmentService {
 			}
 		});
 		
-		/*@SuppressWarnings("unchecked")
+		@SuppressWarnings("unchecked")
 		Map<Integer, Double> s = (Map<Integer,Double>) this.sharedState.get("Report", id);
 		
 		for(Integer key : s.keySet()){
 			logger.info("ATTIME= "+simTime.toString()+" ID= " + id + " Key: " + key + " Value: " + s.get(key) + "\n");
 		}
 		
-		System.out.println();*/		
+		System.out.println();		
 	}
 }

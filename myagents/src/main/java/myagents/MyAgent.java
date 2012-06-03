@@ -53,8 +53,8 @@ public class MyAgent extends AbstractParticipant {
 		s.add(ParticipantLocationService.createSharedState(getID(), loc));
 		
 		s.add(ParticipantCarbonReportingService.createSharedState("Report", this.getCarbonEmissionReports(), this.getID()));
-		s.add(new ParticipantSharedState("Report", 
-	            (Serializable) this.getCarbonEmissionReports(), getID()));
+		//s.add(new ParticipantSharedState("Report", 
+	    //        (Serializable) this.getCarbonEmissionReports(), getID()));
 		return s;
 	}
 	
@@ -132,7 +132,7 @@ public class MyAgent extends AbstractParticipant {
 		
 		
 		/*Debugging purposes*/
-		for(NetworkAddress net : this.network.getConnectedNodes()){
+		/*for(NetworkAddress net : this.network.getConnectedNodes()){
 			Map<Integer,Double> reports = this.reportingService.getReportFor(net.getId());
 			logger.info("Agent reporting: " + this.getID() + " name: " + this.getName());
 			if(this.getName().equals("agent0")){
@@ -140,7 +140,7 @@ public class MyAgent extends AbstractParticipant {
 					logger.info(" Key: " + key + " Value: " + reports.get(key) + "\n");
 				}
 			}
-		}
+		}*/
 		
 	}
 

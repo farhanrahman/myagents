@@ -1,7 +1,7 @@
 /**
  * 
  */
-package helloprotocol;
+package simpleprotocol;
 
 import java.util.UUID;
 

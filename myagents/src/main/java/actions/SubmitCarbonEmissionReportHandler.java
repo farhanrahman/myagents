@@ -2,10 +2,10 @@ package actions;
 
 import java.util.UUID;
 
-import carbon.CarbonReportingService;
 
 import com.google.inject.Inject;
 
+import services.CarbonReportingService;
 import uk.ac.imperial.presage2.core.Action;
 import uk.ac.imperial.presage2.core.environment.ActionHandler;
 import uk.ac.imperial.presage2.core.environment.ActionHandlingException;
@@ -18,12 +18,11 @@ import uk.ac.imperial.presage2.core.messaging.Input;
 @ServiceDependencies({CarbonReportingService.class})
 public class SubmitCarbonEmissionReportHandler implements ActionHandler{
 
-	final protected EnvironmentSharedStateAccess sharedState;
 	final protected CarbonReportingService crs;
 	
 	@Inject
 	public SubmitCarbonEmissionReportHandler(EnvironmentSharedStateAccess sharedState, EnvironmentServiceProvider environment) throws UnavailableServiceException{
-		this.sharedState = sharedState;
+		//this.sharedState = sharedState;
 		this.crs = environment.getEnvironmentService(CarbonReportingService.class);
 	}
 	

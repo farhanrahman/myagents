@@ -2,7 +2,6 @@ package actions;
 
 import uk.ac.imperial.presage2.core.Action;
 import uk.ac.imperial.presage2.core.Time;
-import uk.ac.imperial.presage2.util.participant.AbstractParticipant;
 
 public class SubmitCarbonEmissionReport implements Action {
 	
@@ -10,17 +9,14 @@ public class SubmitCarbonEmissionReport implements Action {
 
 	final private Time simTime;
 	
-	final AbstractParticipant participant;
-	
-	public SubmitCarbonEmissionReport(final Double carbonEmission, final Time simTime, final AbstractParticipant participant){
+	public SubmitCarbonEmissionReport(final Double carbonEmission, final Time simTime){
 		this.carbonEmission = carbonEmission;
-		this.participant = participant;
 		this.simTime = simTime;
 	}
 	
 	@Override
 	public String toString() {
-		return "Report submission [player=" + participant.getID() + ", carbon emission reported="
+		return "carbon emission reported= "
 				+ this.carbonEmission+ "]";
 	}
 

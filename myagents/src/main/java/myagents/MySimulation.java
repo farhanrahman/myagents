@@ -5,10 +5,11 @@ import java.util.Set;
 
 import actions.SubmitCarbonEmissionReportHandler;
 
-import carbon.CarbonReportingService;
 
 import com.google.inject.AbstractModule;
 
+import services.CarbonReportingService;
+import services.ParticipantCarbonReportingService;
 import uk.ac.imperial.presage2.core.simulator.InjectedSimulation;
 import uk.ac.imperial.presage2.core.simulator.Parameter;
 import uk.ac.imperial.presage2.core.simulator.Scenario;
@@ -44,9 +45,10 @@ public class MySimulation extends InjectedSimulation {
 						.addActionHandler(MoveHandler.class)
 						.addActionHandler(SubmitCarbonEmissionReportHandler.class)
 						.addParticipantEnvironmentService(ParticipantLocationService.class)
+						.addParticipantEnvironmentService(ParticipantCarbonReportingService.class)
 						.addGlobalEnvironmentService(CarbonReportingService.class));
 		
-		modules.add(NetworkModule.noNetworkModule());
+		modules.add(NetworkModule.fullyConnectedNetworkModule().withNodeDiscovery());
 		
 		return modules;
 	}

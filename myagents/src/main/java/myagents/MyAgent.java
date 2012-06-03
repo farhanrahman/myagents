@@ -1,6 +1,10 @@
 package myagents;
 
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
@@ -44,13 +48,28 @@ public class MyAgent extends AbstractParticipant {
 		return s;
 	}
 	
-
+	public static enum Replies{
+		GOOD_REPLY,
+		BAD_REPLY
+	};
+	
+	public static final List<Replies> replies = Collections.unmodifiableList(Arrays.asList(Replies.values()));
+	public static final int SIZE = replies.size();
+	public final Random r = new Random();
+	
 	@Override
 	public void initialise(){
 		super.initialise();
 		
 		this.simpleProtocol = new SimpleProtocol("SIMPLE",
-			this.network, this.authkey, this.getID(), this.environment);		
+			this.network, this.authkey, this.getID(), this.environment){
+
+				@Override
+				public Replies getReply() {
+					return MyAgent.replies.get(MyAgent.this.r.nextInt(SIZE));
+				}
+			
+		};		
 	}
 	
 	@Override

@@ -5,6 +5,8 @@ package simpleprotocol;
 
 import java.util.UUID;
 
+import myagents.MyAgent.Replies;
+
 import org.apache.log4j.Logger;
 
 import uk.ac.imperial.presage2.core.environment.EnvironmentConnector;
@@ -34,7 +36,7 @@ import uk.ac.imperial.presage2.util.protocols.TimeoutCondition;
  * @author farhanrahman
  *
  */
-public class SimpleProtocol extends FSMProtocol {
+public abstract class SimpleProtocol extends FSMProtocol {
 
 	Logger logger = Logger.getLogger(SimpleProtocol.class);
 	
@@ -61,6 +63,7 @@ public class SimpleProtocol extends FSMProtocol {
 		SEND_MESSAGE,
 		REPLY,
 		GET_REPLY,
+		GOT_BAD_REPLY,
 		TIMEOUT
 	};
 	
@@ -75,9 +78,9 @@ public class SimpleProtocol extends FSMProtocol {
 			this.description.addState(States.START, StateType.START)
 							.addState(States.WAIT_FOR_REPLY)
 							.addState(States.DONE,StateType.END)
-							.addState(States.MESSAGE_RECEIVED, StateType.END)
-							.addState(States.TIMED_OUT, StateType.END);
-			
+							.addState(States.TIMED_OUT, StateType.END)
+							//States for replier
+							.addState(States.MESSAGE_RECEIVED, StateType.END);
 			//Initiator transition
 			this.description.addTransition(
 						Transitions.SEND_MESSAGE, 
@@ -122,6 +125,21 @@ public class SimpleProtocol extends FSMProtocol {
 							}
 							
 						})
+			.addTransition(Transitions.GOT_BAD_REPLY,
+						   new AndCondition(new MessageTypeCondition("BRAP"), new ConversationCondition()), 
+						   States.WAIT_FOR_REPLY,
+						   States.DONE,
+						   new MessageAction(){
+
+							@Override
+							public void processMessage(Message<?> message,
+									FSMConversation conv, Transition transition) {
+									logger.info("Got BAD REPLY message for agent with ID"
+										+ SimpleProtocol.this.getParticipantID());
+									logger.info("Message: " + message.toString());
+							}
+				
+			})
 			.addTransition(
 						Transitions.TIMEOUT, 
 						new TimeoutCondition(4), 
@@ -149,14 +167,24 @@ public class SimpleProtocol extends FSMProtocol {
 						@Override
 						public void processInitialMessage(Message<?> message,
 								FSMConversation conv, Transition transition) {
-								conv.getNetwork().sendMessage(
-										new UnicastMessage<Object>(
-												Performative.AGREE,
-												"REPLY",
-												SimTime.get(),
-												conv.getNetwork().getAddress(),
-												message.getFrom())
-										);
+								if(SimpleProtocol.this.getReply().equals(Replies.GOOD_REPLY))
+									conv.getNetwork().sendMessage(
+											new UnicastMessage<Object>(
+													Performative.AGREE,
+													"REPLY",
+													SimTime.get(),
+													conv.getNetwork().getAddress(),
+													message.getFrom())
+											);
+								else if(SimpleProtocol.this.getReply().equals(Replies.BAD_REPLY))
+									conv.getNetwork().sendMessage(
+											new UnicastMessage<Object>(
+													Performative.REJECT_PROPOSAL,
+													"BRAP",
+													SimTime.get(),
+													conv.getNetwork().getAddress(),
+													message.getFrom())
+											);						
 							
 						}
 						
@@ -180,5 +208,7 @@ public class SimpleProtocol extends FSMProtocol {
 	public EnvironmentConnector getEnvironment() {
 		return environment;
 	}
+	
+	public abstract Replies getReply();
 
 }

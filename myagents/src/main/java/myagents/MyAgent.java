@@ -14,6 +14,7 @@ import uk.ac.imperial.presage2.core.network.NetworkAddress;
 import uk.ac.imperial.presage2.util.location.Location;
 import uk.ac.imperial.presage2.util.location.ParticipantLocationService;
 import uk.ac.imperial.presage2.util.participant.AbstractParticipant;
+import uk.ac.imperial.presage2.util.protocols.Protocol;
 
 public class MyAgent extends AbstractParticipant {
 
@@ -23,8 +24,7 @@ public class MyAgent extends AbstractParticipant {
 	
 	ParticipantLocationService locationService;
 	
-	private HelloWorldProtocol simpleProtocol;
-	
+	private Protocol simpleProtocol;
 	
 	public MyAgent(UUID id, String name, Location loc){
 		super(id,name);
@@ -33,7 +33,9 @@ public class MyAgent extends AbstractParticipant {
 	
 	@Override
 	protected void processInput(Input in) {
-		this.simpleProtocol.canHandle(in);
+		if(this.simpleProtocol.canHandle(in)){
+			this.simpleProtocol.handle(in);
+		}
 	}
 	
 	@Override
@@ -53,8 +55,8 @@ public class MyAgent extends AbstractParticipant {
 			logger.warn(e);
 		}*/
 		
-		//this.simpleProtocol = new SimpleProtocol("SIMPLE",
-		//		this.network, this.authkey, this.getID(), this.environment);
+		this.simpleProtocol = new SimpleProtocol("SIMPLE",
+			this.network, this.authkey, this.getID(), this.environment);
 		
 		this.simpleProtocol = new HelloWorldProtocol(this.getName(), network);		
 	}
@@ -82,10 +84,12 @@ public class MyAgent extends AbstractParticipant {
 			simpleProtocol.incrementTime();
 		}		
 		
+		super.execute();
+		
 		Set<NetworkAddress> activeConversations = this.simpleProtocol.getActiveConversationMembers();
 		
-		logger.info("Number of participants in the conversation with: " + activeConversations.size()
-					+ " with participant" + this.getID());
+		logger.info("Number of participants in the conversation with: " + this.getName()
+					+ " is " +activeConversations.size());
 		
 		//if(activeConversations.size() == 0){
 /*			for(NetworkAddress net : this.network.getConnectedNodes()){
@@ -103,7 +107,7 @@ public class MyAgent extends AbstractParticipant {
 						.getActiveConversationMembers();
 				int convCount = alreadyTalkingTo.size();
 				for (NetworkAddress a : this.network.getConnectedNodes()) {
-					logger.info("I'm connected to: " + a);
+					logger.info(this.getName() + " is connected to: " + a);
 					// spawn a conversation if I'm not already taking them them
 					// (limit 5 convs)
 					if (!alreadyTalkingTo.contains(a) && convCount < 5) {

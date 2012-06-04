@@ -10,14 +10,18 @@ import java.util.UUID;
 
 import com.google.inject.Inject;
 
+import uk.ac.imperial.presage2.core.environment.EnvironmentService;
 import uk.ac.imperial.presage2.core.environment.EnvironmentSharedStateAccess;
 import uk.ac.imperial.presage2.core.environment.ParticipantSharedState;
 
 /**
+ * This class gives the participants
+ * a read access to the reports
+ * currently held as a shared state
  * @author farhanrahman
  *
  */
-public class ParticipantCarbonReportingService extends CarbonReportingService {
+public class ParticipantCarbonReportingService extends EnvironmentService {
 
 	/**
 	 * @param sharedState
@@ -36,8 +40,8 @@ public class ParticipantCarbonReportingService extends CarbonReportingService {
 	 * @param participantID
 	 * @return
 	 */
-	public static ParticipantSharedState createSharedState(String name, Map<?,?> data, UUID participantID){
-		return new ParticipantSharedState(name, (Serializable) data, participantID);	
+	public static ParticipantSharedState createSharedState(Map<?,?> data, UUID participantID){
+		return new ParticipantSharedState("Report", (Serializable) data, participantID);	
 	}
 	
 	@Deprecated

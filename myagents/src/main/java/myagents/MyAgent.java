@@ -20,7 +20,7 @@ import actions.SubmitCarbonEmissionReport;
 public class MyAgent extends AbstractParticipant {
 
 	Location loc;
-	
+	//Test commit
 	/*
 	 * To be added to kyoto project*/
 	private double carbonEmission = 10.0;
